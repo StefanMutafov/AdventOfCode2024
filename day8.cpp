@@ -50,9 +50,8 @@ std::pair<int, int> calculate_offset(int x1, int y1, int x2, int y2) {
     return offset;
 }
 
-int count_antinodes() {
-
-    return 0;
+bool is_within_bounds(int x, int y){
+    return x>=0 && y >= 0 && x<=size_x && y<=size_y;
 }
 
 int main() {
@@ -63,28 +62,22 @@ int main() {
                 auto offset = calculate_offset(
                         coordinates[i].first, coordinates[i].second,
                         coordinates[j].first, coordinates[j].second);
-                bool done1{true};
-                bool done2{true};
-                for (auto a{1}; done1 || done2; ++a) {
+                bool bounds1{true};
+                bool bounds2{true};
+                for (auto a{1}; bounds1 || bounds2; ++a) {
                     std::pair<int, int> antinode1 = {coordinates[i].first + offset.first * a,
                                                      coordinates[i].second + offset.second * a};
                     std::pair<int, int> antinode2 = {coordinates[j].first - offset.first * a,
                                                      coordinates[j].second - offset.second * a};
-                    if (antinode1.first <= size_x && antinode1.second <= size_y && antinode1.first >= 0 &&
-                        antinode1.second >= 0) {
+
+                    if (bounds1 = is_within_bounds(antinode1.first, antinode1.second)) {
                         antinodes_p2.insert(antinode1);
                         if(a==2){antinodes_p1.insert(antinode1);}
-                    }else{
-                        done1 = false;
                     }
-                    if (antinode2.first <= size_x && antinode2.second <= size_y && antinode2.first >= 0 &&
-                        antinode2.second >= 0) {
+                    if (bounds2 = is_within_bounds(antinode2.first, antinode2.second)) {
                         antinodes_p2.insert(antinode2);
                         if(a==2){antinodes_p1.insert(antinode2);}
-                    }else{
-                        done2 = false;
                     }
-
                 }
             }
         }
